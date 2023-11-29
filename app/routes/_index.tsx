@@ -52,18 +52,32 @@ export async function action({ request }: LoaderFunctionArgs) {
 export default function Index() {
   const { loginId } = useLoaderData<typeof loader>();
 
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1 className="text-3xl font-bold underline">Welcome to Remix</h1>
-      <ul>
+  function renderAuthLinks() {
+    if (loginId) return null;
+    return (
+      <>
         <li>
           <Link to="/signup">Sign Up</Link>
         </li>
         <li>
           <Link to="/signin">Sign In</Link>
         </li>
+      </>
+    );
+  }
+
+  return (
+    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+      <h1 className="text-3xl font-bold">Welcome to Remix</h1>
+      <ul>
+        {renderAuthLinks()}
         <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
+          <a
+            target="_blank"
+            className="underline"
+            href="https://remix.run/docs"
+            rel="noreferrer"
+          >
             Remix Docs
           </a>
         </li>
@@ -72,7 +86,9 @@ export default function Index() {
         <p>
           Signed in as: {loginId}
           <Form id="signout-form" method="post">
-            <button type="submit">Sign Out</button>
+            <button type="submit" className="btn-primary">
+              Sign Out
+            </button>
           </Form>
         </p>
       )}

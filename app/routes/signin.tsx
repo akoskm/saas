@@ -1,10 +1,11 @@
 import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientResponse";
 import { redirect, json } from "@remix-run/node";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-import { Form } from "@remix-run/react";
 import faClient from "~/services/fusion_auth_client";
 import invariant from "tiny-invariant";
 import { getSession, commitSession } from "~/sessions";
+import Input from "~/components/Input";
+import AuthForm from "~/components/AuthForm";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -63,16 +64,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 export default function Login() {
   return (
-    <Form id="signin-form" method="post">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" />
-      </div>
-      <button type="submit">Login</button>
-    </Form>
+    <AuthForm id="signin-form" method="post">
+      <Input id="email" name="email" type="email" label="Email" />
+      <Input id="password" name="password" type="password" label="Password" />
+      <button type="submit" className="btn-primary">
+        Login
+      </button>
+    </AuthForm>
   );
 }
