@@ -1,9 +1,9 @@
-import type {RegistrationRequest} from "@fusionauth/typescript-client";
+import type { RegistrationRequest } from "@fusionauth/typescript-client";
 import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientResponse";
-import type {ActionFunctionArgs} from "@remix-run/node";
-import { json, redirect} from "@remix-run/node";
-import {Form} from "@remix-run/react";
-import faClient from '~/services/fusion_auth_client';
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form } from "@remix-run/react";
+import faClient from "~/services/fusion_auth_client";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -16,10 +16,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   };
   try {
     await faClient.register("", registrationRequest);
-    return redirect('/signin');
+    return redirect("/signin");
   } catch (err) {
     const error = err as ClientResponse<string>;
-    return json({ error: { message: error.response }}, { status: error.statusCode });
+    return json(
+      { error: { message: error.response } },
+      { status: error.statusCode },
+    );
   }
 };
 
@@ -36,5 +39,5 @@ export default function SignUp() {
       </div>
       <button type="submit">Register</button>
     </Form>
-  )
+  );
 }

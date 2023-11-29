@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -26,7 +26,18 @@ services:
       discovery.type: single-node
       ES_JAVA_OPTS: ${ES_JAVA_OPTS}
     healthcheck:
-      test: [ "CMD", "curl",  "--fail" ,"--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:9200/" ]
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "--write-out",
+          "'HTTP %{http_code}'",
+          "--silent",
+          "--output",
+          "/dev/null",
+          "http://localhost:9200/",
+        ]
       interval: 5s
       timeout: 5s
       retries: 5

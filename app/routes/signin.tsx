@@ -1,17 +1,13 @@
 import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientResponse";
-import {redirect, json} from "@remix-run/node";
-import type { LoaderFunctionArgs, ActionFunctionArgs} from "@remix-run/node";
-import {Form} from "@remix-run/react"
-import faClient from "~/services/fusion_auth_client"
+import { redirect, json } from "@remix-run/node";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { Form } from "@remix-run/react";
+import faClient from "~/services/fusion_auth_client";
 import invariant from "tiny-invariant";
 import { getSession, commitSession } from "~/sessions";
 
-export async function loader({
-  request,
-}: LoaderFunctionArgs) {
-  const session = await getSession(
-    request.headers.get("Cookie")
-  );
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
 
   if (session.has("userId")) {
     // Redirect to the home page if they are already signed in.
@@ -28,9 +24,7 @@ export async function loader({
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const session = await getSession(
-    request.headers.get("Cookie")
-  );
+  const session = await getSession(request.headers.get("Cookie"));
   const formData = await request.formData();
   const { email, password } = Object.fromEntries(formData);
 
@@ -38,31 +32,35 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   invariant(password, "Missing password");
 
   const loginRequest = {
-    "loginId": email as string,
-    "password": password as string,
-    "applicationId": process.env.FUSIONAUTH_DEFAULT_APP_ID,
+    loginId: email as string,
+    password: password as string,
+    applicationId: process.env.FUSIONAUTH_DEFAULT_APP_ID,
   };
   try {
     const { response } = await faClient.login(loginRequest);
-    if (!response.user?.id)
-      throw new Error("Login failed");
+    if (!response.user?.id) throw new Error("Login failed");
 
     if (!response.refreshToken)
-      throw new Error("Refresh Token is not sent. Turn on Generate refresh tokens in FusionAuth.");
+      throw new Error(
+        "Refresh Token is not sent. Turn on Generate refresh tokens in FusionAuth.",
+      );
 
     session.set("userId", response.user.id);
     session.set("refreshToken", response.refreshToken);
-    return redirect('/', {
+    return redirect("/", {
       headers: {
         "Set-Cookie": await commitSession(session),
-      }
+      },
     });
   } catch (err) {
     console.log(JSON.stringify(err));
     const error = err as ClientResponse<string>;
-    return json({ error: { message: error.response }}, { status: error.statusCode });
+    return json(
+      { error: { message: error.response } },
+      { status: error.statusCode },
+    );
   }
-}
+};
 export default function Login() {
   return (
     <Form id="signin-form" method="post">
@@ -76,5 +74,5 @@ export default function Login() {
       </div>
       <button type="submit">Login</button>
     </Form>
-  )
+  );
 }
