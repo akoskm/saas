@@ -1,12 +1,26 @@
+import type {RegistrationRequest} from "@fusionauth/typescript-client";
+import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientResponse";
 import type {ActionFunctionArgs} from "@remix-run/node";
-import { redirect} from "@remix-run/node";
+import { json, redirect} from "@remix-run/node";
 import {Form} from "@remix-run/react";
+import faClient from '~/services/fusion_auth_client';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  const updates = Object.fromEntries(formData);
-  console.log(updates);
-  return redirect('/signin');
+  const user = Object.fromEntries(formData);
+  const registrationRequest: RegistrationRequest = {
+    user,
+    registration: {
+      applicationId: process.env.FUSIONAUTH_DEFAULT_APP_ID,
+    },
+  };
+  try {
+    await faClient.register("", registrationRequest);
+    return redirect('/signin');
+  } catch (err) {
+    const error = err as ClientResponse<string>;
+    return json({ error: { message: error.response }}, { status: error.statusCode });
+  }
 };
 
 export default function SignUp() {
