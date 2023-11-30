@@ -65,8 +65,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Login() {
   return (
     <AuthForm id="signin-form" method="post">
-      <Input id="email" name="email" type="email" label="Email" />
-      <Input id="password" name="password" type="password" label="Password" />
+      <Input id="email" name="email" type="email" label="Email" required />
+      <Input
+        id="password"
+        name="password"
+        type="password"
+        label="Password"
+        required
+      />
       <button type="submit" className="btn-primary">
         Login
       </button>
