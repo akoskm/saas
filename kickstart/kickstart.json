@@ -14,7 +14,8 @@
   "apiKeys": [
     {
       "key": "#{apiKey}",
-      "description": "Unrestricted API key"
+      "description": "Unrestricted API key",
+      "keyManager": true
     }
   ],
   "requests": [
@@ -37,8 +38,14 @@
         "systemConfiguration": {
           "corsConfiguration": {
             "allowCredentials": true,
-            "allowedMethods": ["GET", "POST", "OPTIONS"],
-            "allowedOrigins": ["http://localhost:3000"],
+            "allowedMethods": [
+              "GET",
+              "POST",
+              "OPTIONS"
+            ],
+            "allowedOrigins": [
+              "http://localhost:3000"
+            ],
             "debug": false,
             "enabled": true,
             "preflightMaxAgeInSeconds": 0
@@ -56,7 +63,9 @@
         },
         "registration": {
           "applicationId": "#{FUSIONAUTH_APPLICATION_ID}",
-          "roles": ["admin"]
+          "roles": [
+            "admin"
+          ]
         }
       }
     },
@@ -68,11 +77,18 @@
         "application": {
           "name": "Example app",
           "oauthConfiguration": {
-            "authorizedRedirectURLs": ["http://localhost:3000/auth/callback"],
-            "authorizedOriginURLs": ["http://localhost:3000"],
+            "authorizedRedirectURLs": [
+              "http://localhost:3000/auth/callback"
+            ],
+            "authorizedOriginURLs": [
+              "http://localhost:3000"
+            ],
             "clientSecret": "super-secret-secret-that-should-be-regenerated-for-production",
             "logoutURL": "http://localhost:3000/logout",
-            "enabledGrants": ["authorization_code", "refresh_token"],
+            "enabledGrants": [
+              "authorization_code",
+              "refresh_token"
+            ],
             "debug": true,
             "generateRefreshTokens": true
           },
