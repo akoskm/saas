@@ -83,14 +83,14 @@ export default function Index() {
         </li>
       </ul>
       {loginId && (
-        <p>
-          Signed in as: {loginId}
+        <>
+          <p>Signed in as: {loginId}</p>
           <Form id="signout-form" method="post">
             <button type="submit" className="btn-primary">
               Sign Out
             </button>
           </Form>
-        </p>
+        </>
       )}
     </div>
   );

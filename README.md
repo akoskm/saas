@@ -1,6 +1,7 @@
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
+- [FusionAuth Docs](https://fusionauth.io/docs/)
 
 ## Development
 
