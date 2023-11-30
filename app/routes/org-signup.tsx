@@ -84,7 +84,7 @@ async function createApplication(organizationId: string, lockedApiKey: string) {
 
   const createAppResult = await newFusionAuthClient.createApplication("", {
     application: newVareseFusionAuthAppConfig,
-    role: configuredRoles[1],
+    role: configuredRoles[0],
   });
 
   if (!createAppResult?.response?.application?.id) {
