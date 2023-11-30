@@ -1,4 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,9 +7,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 
 import stylesheet from "~/tailwind.css";
+import Navigation from "./components/Navigation";
+import getUserFromSession from "./services/session";
+import { destroySession, getSession } from "./sessions";
+import faClient from "./services/fusion_auth_client";
 
 export const links: LinksFunction = () => [
   {
@@ -17,7 +23,35 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  try {
+    const user = await getUserFromSession(request);
+    return json({ loginId: user.email });
+  } catch (e) {
+    return json({ loginId: null });
+  }
+}
+
+export async function action({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const refreshToken = session.get("refreshToken");
+  if (refreshToken) {
+    faClient.logout(true, refreshToken);
+  }
+  session.unset("userId");
+  return json(
+    { loginId: null },
+    {
+      headers: {
+        "Set-Cookie": await destroySession(session),
+      },
+    },
+  );
+}
+
 export default function App() {
+  const { loginId } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -27,6 +61,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <Navigation loginId={loginId} />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
