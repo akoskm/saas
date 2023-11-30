@@ -1,33 +1,24 @@
-# Welcome to Remix!
+This is a Remix + FusionAuth boilerplate for anyone who wants to quickly spin up a SaaS using these technologies.
 
-- [Remix Docs](https://remix.run/docs)
-- [FusionAuth Docs](https://fusionauth.io/docs/)
 
 ## Development
 
-From your terminal:
-
 ```sh
+npm i
 npm run dev
 ```
 
 This starts your app in development mode, rebuilding assets on file changes.
 
-## Deployment
+- [Remix Docs](https://remix.run/docs)
+- [FusionAuth Docs](https://fusionauth.io/docs/)
 
-First, build your app for production:
+## Deployment
 
 ```sh
 npm run build
-```
-
-Then run the app in production mode:
-
-```sh
 npm start
 ```
-
-Now you'll need to pick a host to deploy it to.
 
 ### DIY
 
@@ -37,3 +28,12 @@ Make sure to deploy the output of `remix build`
 
 - `build/`
 - `public/build/`
+
+# Screenshots
+
+## Login
+![image](https://github.com/akoskm/saas/assets/3111627/56957ae7-fe6a-4b6a-8543-f0986ddf2c67)
+
+## User area
+
+![image](https://github.com/akoskm/saas/assets/3111627/5d246d48-76fe-4999-b6c6-889d4c27543b)
