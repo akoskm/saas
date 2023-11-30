@@ -4,7 +4,7 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
-import { commitSession, getSession } from "~/sessions";
+import { destroySession, getSession } from "~/sessions";
 import faClient from "~/services/fusion_auth_client";
 
 export const meta: MetaFunction = () => {
@@ -43,7 +43,7 @@ export async function action({ request }: LoaderFunctionArgs) {
     { loginId: null },
     {
       headers: {
-        "Set-Cookie": await commitSession(session),
+        "Set-Cookie": await destroySession(session),
       },
     },
   );
