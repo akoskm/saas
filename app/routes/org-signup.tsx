@@ -77,19 +77,22 @@ async function createApplication(organizationId: string, lockedApiKey: string) {
     FUSIONAUTH_BASE_URL,
   );
 
-  const newVareseFusionAuthAppConfig = {
+  const newFusionAuthAppConfig = {
     name: `${organizationId} App`,
     roles: configuredRoles,
+    loginConfiguration: {
+      generateRefreshTokens: true,
+    },
   };
 
   const createAppResult = await newFusionAuthClient.createApplication("", {
-    application: newVareseFusionAuthAppConfig,
+    application: newFusionAuthAppConfig,
     role: configuredRoles[0],
   });
 
   if (!createAppResult?.response?.application?.id) {
     throw new Error(
-      "FusionAuth Varese application create call was successful, but no application was returned!",
+      "An error occurred while creating the FusionAuth application.",
     );
   }
 
@@ -114,7 +117,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         applicationId,
       },
     };
-    await getFusionAuthClient("default").register("", registrationRequest);
+    await getFusionAuthClient(tenantId).register("", registrationRequest);
     return redirect(`${orgName}.saasbp.io/signin`);
   } catch (err) {
     const error = err as ClientResponse<string>;

@@ -1,11 +1,13 @@
 import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientResponse";
 import { redirect, json } from "@remix-run/node";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-import faClient from "~/services/fusion_auth_client";
 import invariant from "tiny-invariant";
 import { getSession, commitSession } from "~/sessions";
 import Input from "~/components/Input";
 import AuthForm from "~/components/AuthForm";
+import getTenantDetails from "~/services/get_tenant_details";
+import getFusionAuthClient from "~/services/get_fusion_auth_client";
+import { getAppIdForTenant } from "~/services/get_app_id_for_tenant";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -32,13 +34,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   invariant(email, "Missing email");
   invariant(password, "Missing password");
 
+  const { tenantId } = await getTenantDetails(request);
+
+  invariant(tenantId, "Missing tenantId");
+
+  const applicationId = await getAppIdForTenant(tenantId);
+
   const loginRequest = {
     loginId: email as string,
     password: password as string,
-    applicationId: process.env.FUSIONAUTH_DEFAULT_APP_ID,
+    applicationId,
   };
+
   try {
-    const { response } = await faClient.login(loginRequest);
+    const { response } =
+      await getFusionAuthClient(tenantId).login(loginRequest);
     if (!response.user?.id) throw new Error("Login failed");
 
     if (!response.refreshToken)
@@ -54,7 +64,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     });
   } catch (err) {
-    console.log(JSON.stringify(err));
     const error = err as ClientResponse<string>;
     return json(
       { error: { message: error.response } },
