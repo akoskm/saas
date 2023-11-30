@@ -31,7 +31,10 @@ Make sure to deploy the output of `remix build`
 
 # Screenshots
 
-## Login
+## Sign Up
+<img width="1150" alt="Xnapper-2023-11-30-12 20 48" src="https://github.com/akoskm/saas/assets/3111627/04abd82d-cd54-46bd-ae74-e209e50580df">
+
+## Sign in
 ![image](https://github.com/akoskm/saas/assets/3111627/56957ae7-fe6a-4b6a-8543-f0986ddf2c67)
 
 ## User area
