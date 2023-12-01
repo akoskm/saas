@@ -1,4 +1,4 @@
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useSubmit } from "@remix-run/react";
 
 export default function UserCard({
   id,
@@ -9,6 +9,8 @@ export default function UserCard({
   email?: string;
   role?: string;
 }) {
+  const submit = useSubmit();
+
   function renderButtons() {
     if (role === "admin") {
       return <p>Cannot delete admin user.</p>;
@@ -20,7 +22,20 @@ export default function UserCard({
         </Link>
         <Form method="post">
           <input type="hidden" name="userId" value={id} />
-          <button className="btn btn-danger" name="intent" value="remove">
+          <button
+            className="btn btn-danger"
+            name="intent"
+            value="remove"
+            onClick={(event) => {
+              event.preventDefault();
+              const result = confirm(
+                "Are you sure you want to remove this user?",
+              );
+              if (result) {
+                submit(event.currentTarget);
+              }
+            }}
+          >
             Remove
           </button>
         </Form>
