@@ -13,6 +13,22 @@ With this, you can reach the site at http://saasbp.io:3000 and http://example.sa
 
 ## Development
 
+### FusionAuth
+
+```
+docker compose up -d
+```
+
+if you want to reset the FusionAuth system, run:
+
+```
+docker compose down -v
+```
+
+[FusionAuth Docs](https://fusionauth.io/docs/)
+
+### Remix
+
 ```sh
 npm i
 npm run dev
@@ -20,8 +36,7 @@ npm run dev
 
 This starts your app in development mode, rebuilding assets on file changes.
 
-- [Remix Docs](https://remix.run/docs)
-- [FusionAuth Docs](https://fusionauth.io/docs/)
+[Remix Docs](https://remix.run/docs)
 
 ## Deployment
 
