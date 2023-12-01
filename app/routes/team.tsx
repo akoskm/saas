@@ -140,6 +140,7 @@ export default function Team() {
             className="btn btn-primary"
             name="intent"
             value="add"
+            disabled={navigation.state === "submitting"}
           >
             Add User
           </button>
