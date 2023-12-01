@@ -6,6 +6,9 @@ export default function Input(props: any) {
     required: props.required,
     onChange: props.onChange,
     onBlur: props.onBlur,
+    value: props.value,
+    defaultValue: props.defaultValue,
+    disabled: props.disabled,
   };
   return (
     <label className="block" htmlFor={props.name}>

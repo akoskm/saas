@@ -36,11 +36,11 @@ export default function Index() {
         </li>
       </ul>
       <div className="flex flex-row gap-4">
-        <Link className="btn-primary" to="/signup">
+        <Link className="btn btn-primary" to="/signup">
           Personal sign up
           <UserIcon className="block h-6 w-6" aria-hidden="true" />
         </Link>
-        <Link className="btn-primary" to="/org-signup">
+        <Link className="btn btn-primary" to="/org-signup">
           Sign Up as an Organization
           <BuildingOfficeIcon className="block h-6 w-6" aria-hidden="true" />
         </Link>

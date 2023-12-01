@@ -169,7 +169,7 @@ export default function SignUp() {
         }}
         helpText={orgName && `${orgName}.sass.io will be your custom domain.`}
       />
-      <button type="submit" className="btn-primary">
+      <button type="submit" className="btn btn-primary">
         Register
       </button>
     </AuthForm>

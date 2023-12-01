@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 
 export default function UserCard({
   id,
@@ -17,11 +17,13 @@ export default function UserCard({
       <div className="flex flex-row gap-2">
         <Form method="post">
           <input type="hidden" name="userId" value={id} />
-          <button className="btn-danger" name="intent" value="remove">
+          <button className="btn btn-danger" name="intent" value="remove">
             Remove
           </button>
         </Form>
-        <button className="btn-primary">Edit</button>
+        <Link to={`/team/${id}/edit`} className="btn btn-primary">
+          Edit
+        </Link>
       </div>
     );
   }

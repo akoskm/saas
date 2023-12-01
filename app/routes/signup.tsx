@@ -38,7 +38,7 @@ export default function SignUp() {
         label="Password"
         required
       />
-      <button type="submit" className="btn-primary">
+      <button type="submit" className="btn btn-primary">
         Register
       </button>
     </AuthForm>

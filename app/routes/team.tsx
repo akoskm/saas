@@ -127,7 +127,7 @@ export default function Team() {
           <Input id="email" name="email" type="email" label="Email" required />
           <button
             type="submit"
-            className="btn-primary"
+            className="btn btn-primary"
             name="intent"
             value="add"
           >
