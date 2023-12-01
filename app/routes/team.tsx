@@ -64,6 +64,8 @@ async function addUser({
     "",
     registrationRequest,
   );
+  // wait 500ms before returning a response
+  await new Promise((resolve) => setTimeout(resolve, 500));
   return json({ user: response.user, ok: true });
 }
 
