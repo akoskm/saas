@@ -3,7 +3,6 @@ import { redirect, json } from "@remix-run/node";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import { getSession, commitSession } from "~/sessions";
-import Input from "~/components/Input";
 import AuthForm from "~/components/AuthForm";
 import getTenantDetails from "~/services/get_tenant_details";
 import getFusionAuthClient from "~/services/get_fusion_auth_client";
@@ -74,14 +73,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Login() {
   return (
     <AuthForm id="signin-form" method="post">
-      <Input id="email" name="email" type="email" label="Email" required />
-      <Input
-        id="password"
-        name="password"
-        type="password"
-        label="Password"
-        required
-      />
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          className="form-input"
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          className="form-input"
+          required
+        />
+      </div>
       <button type="submit" className="btn btn-primary">
         Login
       </button>

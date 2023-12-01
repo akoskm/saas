@@ -7,7 +7,6 @@ import {
 } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import invariant from "tiny-invariant";
-import Input from "~/components/Input";
 import UserCard from "~/components/UserCard";
 import { getAppIdForTenant } from "~/services/get_app_id_for_tenant";
 import getFusionAuthClient from "~/services/get_fusion_auth_client";
@@ -124,7 +123,16 @@ export default function Team() {
           method="post"
           className="flex flex-col gap-4"
         >
-          <Input id="email" name="email" type="email" label="Email" required />
+          <div>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              className="form-input"
+              required
+            />
+          </div>
           <button
             type="submit"
             className="btn btn-primary"

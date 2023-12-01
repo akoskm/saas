@@ -5,7 +5,6 @@ import { json, redirect } from "@remix-run/node";
 import { useState } from "react";
 import invariant from "tiny-invariant";
 import AuthForm from "~/components/AuthForm";
-import Input from "~/components/Input";
 import getFusionAuthClient from "~/services/get_fusion_auth_client";
 
 const configuredRoles = [
@@ -132,43 +131,68 @@ export default function SignUp() {
   const [orgName, setOrgName] = useState("");
   return (
     <AuthForm id="signup-form" method="post">
-      <Input id="email" name="email" type="email" label="Email" required />
-      <Input
-        id="password"
-        name="password"
-        type="password"
-        label="Password"
-        required
-        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          e.target.reportValidity();
-        }}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          // if password length is < 8 characters set and error
-          const value = e.target.value;
-          if (value.length < 8) {
-            e.target.setCustomValidity(
-              "Password must be at least 8 characters",
-            );
-          } else {
-            e.target.setCustomValidity("");
-          }
-        }}
-      />
-      <Input
-        id="organization"
-        name="organization"
-        type="text"
-        label="Organization Name"
-        value={orgName}
-        required
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const value = e.target.value;
-          // create a slug from value replacing spaces and removing non alphanumeric characters
-          const slug = value.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9-]/g, "");
-          setOrgName(slug);
-        }}
-        helpText={orgName && `${orgName}.sass.io will be your custom domain.`}
-      />
+      <div>
+        <label className="block" htmlFor="email">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          className="form-input"
+        />
+      </div>
+      <div>
+        <label className="block" htmlFor="password">
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          className="form-input"
+          required
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            e.target.reportValidity();
+          }}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // if password length is < 8 characters set and error
+            const value = e.target.value;
+            if (value.length < 8) {
+              e.target.setCustomValidity(
+                "Password must be at least 8 characters",
+              );
+            } else {
+              e.target.setCustomValidity("");
+            }
+          }}
+        />
+      </div>
+      <div>
+        <label className="block" htmlFor="organization">
+          Organization Name
+        </label>
+        <input
+          id="organization"
+          name="organization"
+          type="text"
+          value={orgName}
+          className="form-input"
+          required
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            // create a slug from value replacing spaces and removing non alphanumeric characters
+            const slug = value
+              .replace(/\s+/g, "-")
+              .replace(/[^a-zA-Z0-9-]/g, "");
+            setOrgName(slug);
+          }}
+        />
+        <p className="block text-slate-700 text-sm mt-2">
+          {orgName && `${orgName}.sass.io will be your custom domain.`}
+        </p>
+      </div>
       <button type="submit" className="btn btn-primary">
         Register
       </button>
