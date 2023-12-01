@@ -1,3 +1,5 @@
+import { Form } from "@remix-run/react";
+
 export default function UserCard({
   id,
   email,
@@ -5,7 +7,7 @@ export default function UserCard({
 }: {
   id?: string;
   email?: string;
-  role: string;
+  role?: string;
 }) {
   function renderButtons() {
     if (role === "admin") {
@@ -13,7 +15,12 @@ export default function UserCard({
     }
     return (
       <div className="flex flex-row gap-2">
-        <button className="btn-danger">Remove</button>
+        <Form method="post">
+          <input type="hidden" name="userId" value={id} />
+          <button className="btn-danger" name="intent" value="remove">
+            Remove
+          </button>
+        </Form>
         <button className="btn-primary">Edit</button>
       </div>
     );

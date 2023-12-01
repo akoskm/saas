@@ -1,5 +1,11 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import invariant from "tiny-invariant";
 import Input from "~/components/Input";
 import UserCard from "~/components/UserCard";
@@ -34,15 +40,17 @@ function generatePassword() {
   return Math.random().toString(36).slice(-8);
 }
 
-export async function action({ request }: LoaderFunctionArgs) {
-  const { tenantId } = await getTenantDetails(request);
-  invariant(tenantId, "Missing tenantId");
+async function addUser({
+  formData,
+  tenantId,
+}: {
+  formData: FormData;
+  tenantId: string;
+}) {
+  const { email } = Object.fromEntries(formData);
+  invariant(email, "Missing email");
 
   const applicationId = await getAppIdForTenant(tenantId);
-  const formData = await request.formData();
-  const { email } = Object.fromEntries(formData);
-
-  invariant(email, "Missing email");
 
   const registrationRequest = {
     user: {
@@ -53,20 +61,76 @@ export async function action({ request }: LoaderFunctionArgs) {
       applicationId,
     },
   };
-  await getFusionAuthClient(tenantId).register("", registrationRequest);
-  return json({ message: "User added" }, { status: 201 });
+  const { response } = await getFusionAuthClient(tenantId).register(
+    "",
+    registrationRequest,
+  );
+  return json({ user: response.user, ok: true });
+}
+
+async function removeUser({
+  formData,
+  tenantId,
+}: {
+  formData: FormData;
+  tenantId: string;
+}) {
+  const { userId } = Object.fromEntries(formData);
+
+  invariant(userId, "User ID is missing");
+
+  await getFusionAuthClient(tenantId).deleteUser(userId as string);
+  return json({ message: "User deleted" }, { status: 201 });
+}
+
+export async function action({ request }: LoaderFunctionArgs) {
+  const { tenantId } = await getTenantDetails(request);
+  invariant(tenantId, "Missing tenantId");
+
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+  switch (intent) {
+    case "add": {
+      return addUser({ formData, tenantId });
+    }
+    case "remove": {
+      return removeUser({ formData, tenantId });
+    }
+    default: {
+      throw new Error("Unexpected action");
+    }
+  }
 }
 
 export default function Team() {
   const { users } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+  const actionData = useActionData<typeof action>();
+  const form = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (navigation.state === "idle" && actionData?.ok) {
+      form?.current?.reset();
+    }
+  }, [navigation, actionData]);
 
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-3xl font-bold">Team</h1>
       <div className="max-w-md">
-        <Form id="add-user" method="post" className="flex flex-col gap-4">
+        <Form
+          ref={form}
+          id="add-user"
+          method="post"
+          className="flex flex-col gap-4"
+        >
           <Input id="email" name="email" type="email" label="Email" required />
-          <button type="submit" className="btn-primary">
+          <button
+            type="submit"
+            className="btn-primary"
+            name="intent"
+            value="add"
+          >
             Add User
           </button>
         </Form>
