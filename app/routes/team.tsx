@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -11,8 +11,15 @@ import UserCard from "~/components/UserCard";
 import { getAppIdForTenant } from "~/services/get_app_id_for_tenant";
 import getFusionAuthClient from "~/services/get_fusion_auth_client";
 import getTenantDetails from "~/services/get_tenant_details";
+import getUserFromSession from "~/services/session";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  try {
+    await getUserFromSession(request);
+  } catch (e) {
+    return redirect("/signin");
+  }
+
   const { tenantId } = await getTenantDetails(request);
 
   invariant(tenantId, "Missing tenantId");

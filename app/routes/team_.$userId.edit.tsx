@@ -3,8 +3,15 @@ import { Form, Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import getFusionAuthClient from "~/services/get_fusion_auth_client";
 import getTenantDetails from "~/services/get_tenant_details";
+import getUserFromSession from "~/services/session";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  try {
+    await getUserFromSession(request);
+  } catch (e) {
+    return redirect("/signin");
+  }
+
   // get userId from path
   const { userId } = params;
   invariant(userId, "Missing userId");
