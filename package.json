@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "dev": "node --inspect node_modules/.bin/remix dev",
+    "dev": "REMIX_DEV_ORIGIN=http://saasbp.io:3001 node --inspect node_modules/.bin/remix dev",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
   },
