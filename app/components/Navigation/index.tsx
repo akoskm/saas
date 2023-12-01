@@ -4,10 +4,10 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Form, Link, NavLink } from "@remix-run/react";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: false },
-  { name: "Team", href: "/team", current: false },
-  { name: "Projects", href: "/projects", current: false },
-  { name: "Calendar", href: "/calendar", current: false },
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Team", href: "/team" },
+  { name: "Projects", href: "/projects" },
+  { name: "Calendar", href: "/calendar" },
 ];
 
 function classNames(...classes: Array<string>) {
@@ -172,20 +172,20 @@ export default function Navigation({ loginId }: { loginId?: string | null }) {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
-                <Disclosure.Button
+                <NavLink
                   key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium",
-                  )}
-                  aria-current={item.current ? "page" : undefined}
+                  to={item.href}
+                  className={({ isActive }) => {
+                    return classNames(
+                      isActive
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "rounded-md px-3 py-2 text-sm font-medium",
+                    );
+                  }}
                 >
                   {item.name}
-                </Disclosure.Button>
+                </NavLink>
               ))}
             </div>
           </Disclosure.Panel>

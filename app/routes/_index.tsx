@@ -1,6 +1,9 @@
-import { type MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { BuildingOfficeIcon, UserIcon } from "@heroicons/react/24/outline";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
+import getTenantDetails from "~/services/get_tenant_details";
+import getUserFromSession from "~/services/session";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,7 +12,27 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  try {
+    const user = await getUserFromSession(request);
+    const lastLogin = new Date(user.lastLoginInstant ?? "").toLocaleString();
+    const { tenantId, tenantName } = await getTenantDetails(request);
+    return json({
+      loginId: user.email,
+      lastLogin,
+      tenantId,
+      tenantName,
+    });
+  } catch (e) {
+    return json({
+      loginId: null,
+    });
+  }
+}
+
 export default function Index() {
+  const { loginId } = useLoaderData<typeof loader>();
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1 className="text-3xl font-bold">Welcome to Remix</h1>
@@ -35,16 +58,18 @@ export default function Index() {
           </a>
         </li>
       </ul>
-      <div className="flex flex-row gap-4">
-        <Link className="btn btn-primary" to="/signup">
-          Personal sign up
-          <UserIcon className="block h-6 w-6" aria-hidden="true" />
-        </Link>
-        <Link className="btn btn-primary" to="/org-signup">
-          Sign Up as an Organization
-          <BuildingOfficeIcon className="block h-6 w-6" aria-hidden="true" />
-        </Link>
-      </div>
+      {!loginId && (
+        <div className="flex flex-row gap-4">
+          <Link className="btn btn-primary" to="/signup">
+            Personal sign up
+            <UserIcon className="block h-6 w-6" aria-hidden="true" />
+          </Link>
+          <Link className="btn btn-primary" to="/org-signup">
+            Sign Up as an Organization
+            <BuildingOfficeIcon className="block h-6 w-6" aria-hidden="true" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
