@@ -31,6 +31,7 @@ const { getSession, commitSession, destroySession } =
       sameSite: "lax",
       secrets: [process.env.SESSION_SECRET],
       secure: process.env.NODE_ENV === "production",
+      domain: `.${process.env.BASE_DOMAIN}`,
     },
   });
 
