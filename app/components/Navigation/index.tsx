@@ -3,12 +3,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Form, Link, NavLink } from "@remix-run/react";
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Team", href: "/team" },
-  { name: "Projects", href: "/projects" },
-  { name: "Calendar", href: "/calendar" },
-];
+const navigation = [{ name: "Team", href: "/team" }];
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(" ");
