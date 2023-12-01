@@ -15,15 +15,15 @@ export default function UserCard({
     }
     return (
       <div className="flex flex-row gap-2">
+        <Link to={`/team/${id}/edit`} className="btn btn-primary">
+          Edit
+        </Link>
         <Form method="post">
           <input type="hidden" name="userId" value={id} />
           <button className="btn btn-danger" name="intent" value="remove">
             Remove
           </button>
         </Form>
-        <Link to={`/team/${id}/edit`} className="btn btn-primary">
-          Edit
-        </Link>
       </div>
     );
   }
