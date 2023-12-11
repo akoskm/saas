@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "dev": "cross-env NODE_ENV=development node_modules/.bin/remix dev",
-    "start": "cross-env NODE_ENV=development node ./build/index.js",
+    "dev": "cross-env NODE_ENV=development remix dev",
+    "start": "node ./build/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
