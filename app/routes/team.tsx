@@ -88,7 +88,7 @@ async function removeUser({
   invariant(userId, "User ID is missing");
 
   await getFusionAuthClient(tenantId).deleteUser(userId as string);
-  return json({ message: "User deleted" }, { status: 201 });
+  return json({ message: "User deleted", ok: true }, { status: 201 });
 }
 
 export async function action({ request }: LoaderFunctionArgs) {
