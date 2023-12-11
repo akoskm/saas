@@ -29,3 +29,13 @@ jobs:
         with:
           push: true
           tags: akoskm/saas:latest
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} # Set your DigitalOcean access token as a secret in your repository settings
+
+      - name: Deploy to DigitalOcean
+        run: |
+          # Replace <droplet-id> with your actual droplet ID and <tag> with the Docker image tag you want to deploy
+          doctl compute droplet-action docker-image-replace ubuntu-s-1vcpu-2gb-fra1-01 akoskm/saas:latest --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
