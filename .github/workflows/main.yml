@@ -17,3 +17,9 @@ jobs:
 
       - name: Run Typecheck
         run: npm run typecheck
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: akoskm/saas:latest

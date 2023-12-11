@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "cross-env NODE_ENV=development remix dev",
-    "start": "node ./build/index.js",
+    "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
