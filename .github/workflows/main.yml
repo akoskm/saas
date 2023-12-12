@@ -31,7 +31,7 @@ jobs:
           tags: akoskm/saas:latest
 
       - name: SSH and deploy to AWS EC2
-        uses: appleboy/ssh-action@1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.AWS_EC2_IP }}
           username: ${{ secrets.AWS_EC2_USER }}
