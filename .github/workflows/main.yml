@@ -39,6 +39,6 @@ jobs:
           script: |
             cd ~/saas
             docker pull akoskm/saas:latest
-            docker stop saas_container
-            docker rm saas_container
+            docker stop saas_container || true
+            docker rm saas_container || true
             docker run -d --name saas_container --env-file .env -p 4000:4000 akoskm/saas:latest
