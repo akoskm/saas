@@ -37,6 +37,7 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           script: |
+            cd ~/saas
             docker pull akoskm/saas:latest
             docker stop saas_container
             docker rm saas_container
