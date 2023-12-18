@@ -21,11 +21,21 @@ const configuredRoles = [
 ];
 
 async function createTenant(organizationId: string) {
+  const tenantResponse = await getFusionAuthClient("default").retrieveTenant(
+    process.env.DEFAULT_TENANT_ID!,
+  );
+  const tenant = tenantResponse.response.tenant;
+
+  if (!tenant?.id) {
+    throw new Error("Couldn't find the blueprint tenant for tenant creation!");
+  }
+
   const tenantConfig = {
     sourceTenantId: getFusionAuthClient("default").tenantId,
     tenant: {
       name: organizationId,
       issuer: "saasbp.io",
+      jwtConfiguration: tenant.jwtConfiguration,
     },
   };
   const createTenantResult = await getFusionAuthClient("default").createTenant(
