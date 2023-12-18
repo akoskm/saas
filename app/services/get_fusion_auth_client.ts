@@ -23,9 +23,9 @@ class FusionAuthClientFactory {
   }
 
   public static getFusionAuthClient(
-    tenantId: "default" | string,
+    tenantId?: "default" | string,
   ): FusionAuthClient {
-    if (tenantId === "default") {
+    if (!tenantId || tenantId === "default") {
       return FusionAuthClientFactory.getDefaultClient();
     }
 

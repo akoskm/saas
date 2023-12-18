@@ -3,7 +3,8 @@ import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientR
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import AuthForm from "~/components/AuthForm";
-import faClient from "~/services/fusion_auth_client";
+import getFusionAuthClient from "~/services/get_fusion_auth_client";
+import getTenantDetails from "~/services/get_tenant_details";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -15,7 +16,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     },
   };
   try {
-    await faClient.register("", registrationRequest);
+    const { tenantId } = await getTenantDetails(request);
+    getFusionAuthClient(tenantId).register("", registrationRequest);
     return redirect("/signin");
   } catch (err) {
     const error = err as ClientResponse<string>;
