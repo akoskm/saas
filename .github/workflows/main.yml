@@ -40,4 +40,4 @@ jobs:
             docker pull akoskm/saas:latest
             docker stop saas_container
             docker rm saas_container
-            docker run -d --name saas_container --env-file .env -p 3000:3000 akoskm/saas:latest
+            docker run -d --name saas_container --env-file .env -p 4000:4000 akoskm/saas:latest

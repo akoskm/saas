@@ -16,5 +16,7 @@ COPY . .
 # Build the app
 RUN npm run build
 
+ENV PORT=4000
+
 # Start the app
 CMD ["npm", "start"]
