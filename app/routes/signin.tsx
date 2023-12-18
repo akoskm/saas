@@ -5,7 +5,7 @@ import invariant from "tiny-invariant";
 import { getSession, commitSession } from "~/sessions";
 import AuthForm from "~/components/AuthForm";
 import getTenantDetails from "~/services/get_tenant_details";
-import getFusionAuthClient from "~/services/get_fusion_auth_client";
+import { signIn } from "~/services/fusionauth_tenant";
 import { getAppIdForTenant } from "~/services/get_app_id_for_tenant";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -46,8 +46,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   };
 
   try {
-    const { response } =
-      await getFusionAuthClient(tenantId).login(loginRequest);
+    const { response } = await signIn(request, loginRequest);
     if (!response.user?.id) throw new Error("Login failed");
 
     if (!response.refreshToken)

@@ -1,112 +1,10 @@
-import { FusionAuthClient } from "@fusionauth/typescript-client";
 import type ClientResponse from "@fusionauth/typescript-client/build/src/ClientResponse";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useState } from "react";
 import invariant from "tiny-invariant";
 import AuthForm from "~/components/AuthForm";
-import getFusionAuthClient from "~/services/get_fusion_auth_client";
-
-const configuredRoles = [
-  {
-    name: "admin",
-    description: "Admin role inside the organization",
-    isDefault: false,
-  },
-  {
-    name: "member",
-    description: "Member role",
-    isDefault: true,
-  },
-];
-
-async function createTenant(organizationId: string) {
-  const tenantResponse = await getFusionAuthClient("default").retrieveTenant(
-    process.env.DEFAULT_TENANT_ID!,
-  );
-  const tenant = tenantResponse.response.tenant;
-
-  if (!tenant?.id) {
-    throw new Error("Couldn't find the blueprint tenant for tenant creation!");
-  }
-
-  const tenantConfig = {
-    sourceTenantId: getFusionAuthClient("default").tenantId,
-    tenant: {
-      name: organizationId,
-      issuer: "saasbp.io",
-      jwtConfiguration: tenant.jwtConfiguration,
-    },
-  };
-  const createTenantResult = await getFusionAuthClient("default").createTenant(
-    "",
-    tenantConfig,
-  );
-
-  if (!createTenantResult?.response?.tenant?.id) {
-    throw new Error("Couldn't create tenant. FusionAuth response was empty!");
-  }
-
-  return createTenantResult.response.tenant.id;
-}
-
-const createApiKey = async (organizationName: string, tenantId: string) => {
-  const apiKeyRequest = {
-    apiKey: {
-      metaData: {
-        attributes: {
-          description: `API key for ${organizationName}`,
-        },
-      },
-      tenantId,
-    },
-  };
-
-  const createAPIKeyResult = await getFusionAuthClient("default").createAPIKey(
-    "",
-    apiKeyRequest,
-  );
-
-  if (!createAPIKeyResult?.response?.apiKey?.key) {
-    throw new Error(
-      "FusionAuth API key create call was successful, but no API key was returned!",
-    );
-  }
-
-  const fusionAuthTenantLockedApiKey = createAPIKeyResult.response.apiKey.key;
-
-  return fusionAuthTenantLockedApiKey;
-};
-
-async function createApplication(organizationId: string, lockedApiKey: string) {
-  const FUSIONAUTH_BASE_URL = process.env.FUSIONAUTH_BASE_URL!;
-
-  const newFusionAuthClient = new FusionAuthClient(
-    lockedApiKey,
-    FUSIONAUTH_BASE_URL,
-  );
-
-  const newFusionAuthAppConfig = {
-    name: `${organizationId} App`,
-    roles: configuredRoles,
-    loginConfiguration: {
-      generateRefreshTokens: true,
-    },
-  };
-
-  const createAppResult = await newFusionAuthClient.createApplication("", {
-    application: newFusionAuthAppConfig,
-    role: configuredRoles[0],
-  });
-
-  if (!createAppResult?.response?.application?.id) {
-    throw new Error(
-      "An error occurred while creating the FusionAuth application.",
-    );
-  }
-
-  return createAppResult.response.application.id;
-}
+import { registerTenant } from "~/services/fusionauth_tenant";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -116,17 +14,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const orgName = user.organization as string;
 
-  const tenantId = await createTenant(orgName);
-  const lockedApiKey = await createApiKey(orgName, tenantId);
-  const applicationId = await createApplication(orgName, lockedApiKey);
   try {
-    const registrationRequest = {
-      user,
-      registration: {
-        applicationId,
-      },
-    };
-    await getFusionAuthClient(tenantId).register("", registrationRequest);
+    await registerTenant(orgName, {
+      email: user.email as string,
+      password: user.password as string,
+    });
     return redirect(`${orgName}.saasbp.io/signin`);
   } catch (err) {
     const error = err as ClientResponse<string>;

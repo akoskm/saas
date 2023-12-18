@@ -14,8 +14,7 @@ import stylesheet from "~/tailwind.css";
 import Navigation from "./components/Navigation";
 import getUserFromSession from "./services/session";
 import { destroySession, getSession } from "./sessions";
-import getTenantDetails from "./services/get_tenant_details";
-import getFusionAuthClient from "./services/get_fusion_auth_client";
+import { logout } from "~/services/fusionauth_tenant";
 
 export const links: LinksFunction = () => [
   {
@@ -37,8 +36,7 @@ export async function action({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const refreshToken = session.get("refreshToken");
   if (refreshToken) {
-    const { tenantId } = await getTenantDetails(request);
-    getFusionAuthClient(tenantId).logout(true, refreshToken);
+    logout(request, refreshToken);
   }
   session.unset("userId");
   return json(
