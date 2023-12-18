@@ -76,22 +76,6 @@
       "body": {
         "application": {
           "name": "Example app",
-          "oauthConfiguration": {
-            "authorizedRedirectURLs": [
-              "http://localhost:3000/auth/callback"
-            ],
-            "authorizedOriginURLs": [
-              "http://localhost:3000"
-            ],
-            "clientSecret": "super-secret-secret-that-should-be-regenerated-for-production",
-            "logoutURL": "http://localhost:3000/logout",
-            "enabledGrants": [
-              "authorization_code",
-              "refresh_token"
-            ],
-            "debug": true,
-            "generateRefreshTokens": true
-          },
           "jwtConfiguration": {
             "enabled": true,
             "accessTokenKeyId": "#{asymmetricKeyId}",
