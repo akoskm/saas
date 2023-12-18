@@ -31,7 +31,7 @@ docker compose down -v
 
 ```sh
 npm i
-npm run dev
+npm run dev # To debug the app run this command in Run and Debug > JavaScript Debug Terminal, no other config needed
 ```
 
 This starts your app in development mode, rebuilding assets on file changes.
