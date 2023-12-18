@@ -81,17 +81,6 @@ services:
       - fusionauth_config:/usr/local/fusionauth/config
       - ./kickstart:/usr/local/fusionauth/kickstart
 
-  saas:
-    build: .
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-      - search
-      - fusionauth
-    env_file:
-      - .env
-
 networks:
   db_net:
     driver: bridge
