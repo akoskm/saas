@@ -15,5 +15,8 @@ export default async function getUserFromSession(request: Request) {
   if (!user?.email) {
     throw new Error("FusionAuth User not found");
   }
-  return user;
+  return {
+    ...user,
+    defaultTenant: user.tenantId === process.env.DEFAULT_TENANT_ID,
+  };
 }

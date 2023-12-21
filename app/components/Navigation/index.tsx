@@ -3,13 +3,23 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Form, Link, NavLink } from "@remix-run/react";
 
-const navigation = [{ name: "Team", href: "/team" }];
+const navigation = [
+  { name: "Team", href: "/team" },
+  { name: "Developers", href: "/developers" },
+  { name: "Skills", href: "/skills" },
+];
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navigation({ loginId }: { loginId?: string | null }) {
+export default function Navigation({
+  loginId,
+  defaultTenant,
+}: {
+  loginId?: string | null;
+  defaultTenant: boolean;
+}) {
   function renderLoginId() {
     if (loginId) {
       return (
@@ -104,22 +114,26 @@ export default function Navigation({ loginId }: { loginId?: string | null }) {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <NavLink
-                        key={item.name}
-                        to={item.href}
-                        className={({ isActive, isPending }) => {
-                          return classNames(
-                            isActive
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "rounded-md px-3 py-2 text-sm font-medium",
-                          );
-                        }}
-                      >
-                        {item.name}
-                      </NavLink>
-                    ))}
+                    {navigation.map((item) => {
+                      if (item.name === "Team" && defaultTenant) return null;
+
+                      return (
+                        <NavLink
+                          key={item.name}
+                          to={item.href}
+                          className={({ isActive, isPending }) => {
+                            return classNames(
+                              isActive
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "rounded-md px-3 py-2 text-sm font-medium",
+                            );
+                          }}
+                        >
+                          {item.name}
+                        </NavLink>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
