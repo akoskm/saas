@@ -128,12 +128,22 @@ export async function registerTenant(
   defaultUser: { email: string; password: string },
 ) {
   const tenantId = await createTenant(orgName);
+  if (!tenantId) {
+    throw new Error("Couldn't create tenant!");
+  }
   const lockedApiKey = await createApiKey(orgName, tenantId);
+  if (!lockedApiKey) {
+    throw new Error("Couldn't create API key!");
+  }
   const applicationId = await createApplication(orgName, lockedApiKey);
+  if (!applicationId) {
+    throw new Error("Couldn't create application!");
+  }
   const registrationRequest = {
     user: defaultUser,
     registration: {
       applicationId,
+      roles: configuredRoles.map((role) => role.name),
     },
   };
   const faClient = getFusionAuthClient(tenantId);
