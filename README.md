@@ -3,7 +3,7 @@ This is a Remix + FusionAuth boilerplate for anyone who wants to quickly spin up
 ## Demo
 
 To host the demo, We need a DigitalOcean droplet with 2GB RAM for FusionAuth to run.
-You can make this happen by donating at https://github.com/sponsors/akoskm. 󰕹
+You can make this happen by making a donation at https://github.com/sponsors/akoskm. 🙇‍♂️
 
 ## Setup
 
