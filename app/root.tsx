@@ -26,7 +26,7 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const user = await getUserFromSession(request);
-    return json({ loginId: user.email, defaultTenant: user.defaultTenant });
+    return json({ loginId: user.email, defaultTenant: user.defaultTenant, isAdmin: user.isAdmin });
   } catch (e) {
     return json({ loginId: null, defaultTenant: true });
   }
@@ -54,7 +54,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 }
 
 export default function App() {
-  const { loginId, defaultTenant } = useLoaderData<typeof loader>();
+  const { loginId, defaultTenant, isAdmin } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
@@ -65,7 +65,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Navigation loginId={loginId} defaultTenant={defaultTenant} />
+        <Navigation loginId={loginId} defaultTenant={defaultTenant} isAdmin={isAdmin} />
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <Outlet />

@@ -14,12 +14,33 @@ function classNames(...classes: Array<string>) {
 }
 
 export default function Navigation({
+  isAdmin,
   loginId,
   defaultTenant,
 }: {
+  isAdmin: boolean;
   loginId?: string | null;
   defaultTenant: boolean;
 }) {
+  function renderTeamLink() {
+    if (!isAdmin) return null;
+
+    return (
+      <Menu.Item>
+        {({ active }) => (
+          <Link
+            to="/team"
+            className={classNames(
+              active ? "bg-gray-100" : "",
+              "block px-4 py-2 text-sm text-gray-700"
+            )}
+          >
+            Team
+          </Link>
+        )}
+      </Menu.Item>
+    );
+  }
   function renderLoginId() {
     if (loginId) {
       return (
@@ -30,20 +51,21 @@ export default function Navigation({
                 to="/me"
                 className={classNames(
                   active ? "bg-gray-100" : "",
-                  "block px-4 py-2 text-sm text-gray-700",
+                  "block px-4 py-2 text-sm text-gray-700"
                 )}
               >
                 {loginId}
               </Link>
             )}
           </Menu.Item>
+          {renderTeamLink()}
           <Menu.Item>
             {({ active }) => (
               <Link
                 to="/settings"
                 className={classNames(
                   active ? "bg-gray-100" : "",
-                  "block px-4 py-2 text-sm text-gray-700",
+                  "block px-4 py-2 text-sm text-gray-700"
                 )}
               >
                 Settings
@@ -57,7 +79,7 @@ export default function Navigation({
                   type="submit"
                   className={classNames(
                     active ? "bg-gray-100" : "",
-                    "block px-4 py-2 text-sm text-gray-700",
+                    "block px-4 py-2 text-sm text-gray-700"
                   )}
                 >
                   Sign Out
@@ -74,7 +96,7 @@ export default function Navigation({
           <Link
             className={classNames(
               active ? "bg-gray-100" : "",
-              "block px-4 py-2 text-sm text-gray-700",
+              "block px-4 py-2 text-sm text-gray-700"
             )}
             to="/signin"
           >
@@ -126,7 +148,7 @@ export default function Navigation({
                               isActive
                                 ? "bg-gray-900 text-white"
                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                              "rounded-md px-3 py-2 text-sm font-medium",
+                              "rounded-md px-3 py-2 text-sm font-medium"
                             );
                           }}
                         >
@@ -189,7 +211,7 @@ export default function Navigation({
                       isActive
                         ? "bg-gray-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "rounded-md px-3 py-2 text-sm font-medium",
+                      "rounded-md px-3 py-2 text-sm font-medium"
                     );
                   }}
                 >
