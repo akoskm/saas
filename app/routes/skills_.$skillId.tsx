@@ -67,7 +67,7 @@ export default function Edit() {
               name="name"
               type="text"
               required
-              defaultValue={skill.name || ""}
+              defaultValue={skill?.name || ""}
             />
           </div>
           <div>
@@ -76,14 +76,14 @@ export default function Edit() {
               className="form-input"
               name="description"
               required
-              defaultValue={skill.description || ""}
+              defaultValue={skill?.description || ""}
             />
           </div>
           <input
             className="form-input"
             type="hidden"
             name="id"
-            value={skill.id}
+            value={skill?.id}
           />
           <div className="flex flex-row gap-2">
             <button className="btn btn-primary">Save</button>

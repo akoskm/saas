@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const user = await getUserFromSession(request);
     return json({ loginId: user.email, defaultTenant: user.defaultTenant, isAdmin: user.isAdmin });
   } catch (e) {
-    return json({ loginId: null, defaultTenant: true });
+    return json({ loginId: null, defaultTenant: true, isAdmin: false });
   }
 }
 

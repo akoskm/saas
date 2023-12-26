@@ -11,7 +11,7 @@ export default function UserCard({
   id: string;
   email: string;
   name: string;
-  mobilePhone?: string;
+  mobilePhone: string | null;
   skills: Array<Skill>;
 }) {
   const submit = useSubmit();

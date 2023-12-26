@@ -9,6 +9,7 @@ export default async function getUserFromSession(request: Request) {
 
   if (!userId) throw new Error("User not found");
   const { tenantId } = await getTenantDetails(request);
+  if (!tenantId) throw new Error("Tenant not found");
   const appId = await getAppIdForTenant(tenantId);
 
   const {
@@ -17,7 +18,7 @@ export default async function getUserFromSession(request: Request) {
   if (!user?.email) {
     throw new Error("FusionAuth User not found");
   }
-  const role = user.registrations.find((r) => r.applicationId === appId)?.roles[0];
+  const role = user.registrations?.find((r) => r.applicationId === appId)?.roles?.[0];
   return {
     ...user,
     role,

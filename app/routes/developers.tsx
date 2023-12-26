@@ -137,7 +137,6 @@ export default function Devs() {
             email={developer.email}
             mobilePhone={developer.mobilePhone}
             skills={developer.skills}
-            bio={developer.bio}
           />
         ))}
       </div>
