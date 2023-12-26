@@ -21,6 +21,12 @@ export default function Navigation({
   loginId?: string | null;
   defaultTenant: boolean;
 }) {
+  function getNavigationItems() {
+    if (!loginId) return [];
+
+    return navigation;
+  }
+
   function renderTeamLink() {
     if (!isAdmin) return null;
 
@@ -135,7 +141,7 @@ export default function Navigation({
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => {
+                    {getNavigationItems().map((item) => {
                       if (item.name === "Team" && defaultTenant) return null;
 
                       return (
@@ -201,7 +207,7 @@ export default function Navigation({
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
+              {getNavigationItems().map((item) => (
                 <NavLink
                   key={item.name}
                   to={item.href}
