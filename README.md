@@ -1,5 +1,10 @@
 This is a Remix + FusionAuth boilerplate for anyone who wants to quickly spin up a SaaS using these technologies.
 
+## Demo
+
+To host the demo, We need a DigitalOcean droplet with 2GB RAM for FusionAuth to run.
+You can make this happen by donating at https://github.com/sponsors/akoskm. 󰕹
+
 ## Setup
 
 You must change your /etc/hosts file to test multi-tenant sign-up and sign-in. Add the following entries:

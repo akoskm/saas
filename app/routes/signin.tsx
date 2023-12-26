@@ -63,6 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
   } catch (err) {
     const error = err as ClientResponse<string>;
+    console.log(error);
     return json(
       { error: { message: error.response } },
       { status: error.statusCode },
