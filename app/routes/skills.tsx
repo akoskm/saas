@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { redirect, json } from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -11,8 +11,12 @@ import { useEffect, useRef } from "react";
 import invariant from "tiny-invariant";
 import SkillCard from "~/components/SkillCard";
 import getTenantDetails from "~/services/get_tenant_details";
+import { verifyUser } from "~/utils/verify_user";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const isVerified = await verifyUser(request);
+  if (!isVerified) return redirect("/signin");
+
   const { tenantId } = await getTenantDetails(request);
   invariant(tenantId, "Missing tenantId");
 

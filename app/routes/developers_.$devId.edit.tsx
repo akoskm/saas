@@ -6,8 +6,12 @@ import invariant from "tiny-invariant";
 import getTenantDetails from "~/services/get_tenant_details";
 import getUserFromSession from "~/services/session";
 import Select from "react-select";
+import { verifyUser } from "~/utils/verify_user";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  const isVerified = await verifyUser(request);
+  if (!isVerified) return redirect('/signin');
+
   const { tenantId } = await getTenantDetails(request);
   invariant(tenantId, "Missing tenantId");
 

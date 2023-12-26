@@ -15,7 +15,6 @@ import Navigation from "./components/Navigation";
 import getUserFromSession from "./services/session";
 import { destroySession, getSession } from "./sessions";
 import { logout } from "~/services/fusionauth_tenant";
-import Chat from "~/components/Chat";
 
 export const links: LinksFunction = () => [
   {
@@ -33,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 }
 
-async function signOut(request) {
+async function signOut(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
   const refreshToken = session.get("refreshToken");
   if (refreshToken) {
@@ -50,22 +49,8 @@ async function signOut(request) {
   );
 }
 
-async function startChat() {
-  console.log("starting chat");
-  return json({ startChat: true });
-}
-
 export async function action({ request }: LoaderFunctionArgs) {
-  const formData = await request.formData();
-  const intent = formData.get("intent");
-  switch (intent) {
-    case "start-chat": {
-      return startChat();
-    }
-    default: {
-      return signOut(request);
-    }
-  }
+  return signOut(request);
 }
 
 export default function App() {
@@ -86,7 +71,6 @@ export default function App() {
             <Outlet />
           </div>
         </main>
-        <Chat />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

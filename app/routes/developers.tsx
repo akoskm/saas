@@ -5,11 +5,12 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { useRef, useEffect } from "react";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import getTenantDetails from "~/services/get_tenant_details";
 import { PrismaClient } from "@prisma/client";
 import DeveloperCard from "~/components/DeveloperCard";
+import { verifyUser } from "~/utils/verify_user";
 
 async function addDeveloper({
   formData,
@@ -51,6 +52,9 @@ export async function action({ request }: LoaderFunctionArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const isVerified = await verifyUser(request);
+  if (!isVerified) return redirect('/signin');
+
   const { tenantId } = await getTenantDetails(request);
   invariant(tenantId, "Missing tenantId");
 
