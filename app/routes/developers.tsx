@@ -8,7 +8,7 @@ import { useRef, useEffect } from "react";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import getTenantDetails from "~/services/get_tenant_details";
-import { PrismaClient } from "@prisma/client";
+import prisma from "~/prisma";
 import DeveloperCard from "~/components/DeveloperCard";
 import { verifyUser } from "~/utils/verify_user";
 
@@ -23,7 +23,6 @@ async function addDeveloper({
   invariant(name, "Missing name");
   invariant(email, "Missing email");
 
-  const prisma = new PrismaClient();
   await prisma.developer.create({
     data: {
       name: name as string,
@@ -62,7 +61,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   let { searchParams } = new URL(request.url);
   let skill = searchParams.get("skill");
 
-  const prisma = new PrismaClient();
   const developers = await prisma.developer.findMany({
     where: {
       tenantId,

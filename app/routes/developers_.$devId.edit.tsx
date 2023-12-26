@@ -1,5 +1,4 @@
 import type { Skill } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -7,6 +6,7 @@ import getTenantDetails from "~/services/get_tenant_details";
 import getUserFromSession from "~/services/session";
 import Select from "react-select";
 import { verifyUser } from "~/utils/verify_user";
+import prisma from "~/prisma";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const isVerified = await verifyUser(request);
@@ -25,7 +25,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { devId } = params;
   invariant(devId, "Missing devId");
 
-  const prisma = new PrismaClient();
   const developer = await prisma.developer.findUnique({
     where: {
       id: devId,
@@ -69,7 +68,6 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   const bio = formData.get("bio");
   const skills = formData.getAll("skills").map((skillId) => skillId as string);
 
-  const prisma = new PrismaClient();
   await prisma.developer.update({
     where: {
       id: devId,
