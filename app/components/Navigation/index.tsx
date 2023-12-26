@@ -4,7 +4,6 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Form, Link, NavLink } from "@remix-run/react";
 
 const navigation = [
-  { name: "Team", href: "/team" },
   { name: "Developers", href: "/developers" },
   { name: "Skills", href: "/skills" },
 ];

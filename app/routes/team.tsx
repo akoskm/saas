@@ -15,7 +15,8 @@ import getUserFromSession from "~/services/session";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
-    await getUserFromSession(request);
+    const user = await getUserFromSession(request);
+    if (!user.isAdmin) throw new Error("Not an admin");
   } catch (e) {
     return redirect("/signin");
   }
