@@ -83,6 +83,9 @@
           },
           "registrationConfiguration": {
             "enabled": true
+          },
+          "loginConfiguration": {
+            "generateRefreshTokens": true
           }
         }
       }
