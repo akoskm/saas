@@ -7,6 +7,16 @@ You can make this happen by making a donation at https://github.com/sponsors/ako
 
 ## Setup
 
+### ⚠️ .env file
+
+You should never commit your .env file to Git in a production project.
+
+I added one to make it easier for _You_ to get started with the project.
+
+_Make sure you replace the .env values before launching the app in production!_
+
+### Network
+
 You must change your /etc/hosts file to test multi-tenant sign-up and sign-in. Add the following entries:
 
 ```
